@@ -51,7 +51,7 @@
             box-shadow: 0px 0px 20px rgba(255, 0, 102, 0.5);
             object-fit: cover;
         }
-        .heart, .balloon, .star {
+        .floating-object {
             position: fixed;
             font-size: 2em;
             opacity: 0.8;
@@ -61,57 +61,36 @@
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-100vh); opacity: 0; }
         }
+        audio {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1 style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;color: #d03cb0;"> 🎂 HAPPY BIRTHDAY PADIPS 💖 </h1>
+    <h1>🎂 HAPPY BIRTHDAY PADIPS 💖</h1>
     <img src="prince.jpg" alt="Birthday Cake">
-    <p style="font-size: 20px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color: #ff0066;" >Wishing you a fantastic day filled with love & joy! ❤️💖</p>
+    <p>Wishing you a fantastic day filled with love & joy! ❤️💖</p>
 
-    <button class="button" onclick="playMusic()">Play Birthday Song 🎶</button>
+    <button class="button" onclick="toggleMusic()">Play Birthday Song 🎶</button>
 
-    <audio id="birthdaySong">
+    <audio id="birthdaySong" loop>
         <source src="the-birthday-gift-masstamilan.fm.mp3" type="audio/mp3">
     </audio>
 
     <script>
-        function playMusic() {
-            let song = document.getElementById('birthdaySong');
-            if (song.paused) {
-                song.play();
-                startFireworks();
-            } else {
+        let isPlaying = false;
+        const song = document.getElementById('birthdaySong');
+
+        function toggleMusic() {
+            if (isPlaying) {
                 song.pause();
-                song.currentTime = 0;
+                isPlaying = false;
+            } else {
+                song.play();
+                isPlaying = true;
+                startFireworks();
             }
-        }
-
-        function startConfetti() {
-            setInterval(() => {
-                confetti({
-                    particleCount: 15,
-                    spread: 160,
-                    origin: { x: Math.random(), y: Math.random() * 0.5 },
-                    colors: ['#ff0000', '#ff6600', '#ffff00', '#33cc33', '#3399ff', '#9933ff']
-                });
-            }, 500);
-        }
-
-        function createFloatingObject(type, emojis, duration) {
-            const obj = document.createElement("div");
-            obj.classList.add(type);
-            obj.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-            obj.style.left = Math.random() * 100 + "vw";
-            obj.style.animationDuration = Math.random() * duration + 4 + "s";
-            document.body.appendChild(obj);
-            setTimeout(() => obj.remove(), 6000);
-        }
-
-        function startFloatingEffects() {
-            setInterval(() => createFloatingObject("heart", ["❤", "💜", "💙", "💛"], 6), 400);
-            setInterval(() => createFloatingObject("balloon", ["🩵", "🤍", "💓"], 8), 800);
-            setInterval(() => createFloatingObject("star", ["", "", ""], 7), 600);
         }
 
         function startFireworks() {
@@ -119,15 +98,29 @@
                 confetti({
                     particleCount: 100,
                     spread: 180,
-                    colors: ['#ff0000', '#ff6600', '#ffff00', '#33cc33', '#3399ff', '#9933ff'],
-                    origin: { x: Math.random(), y: Math.random() }
+                    origin: { x: Math.random(), y: Math.random() },
+                    colors: ['#ff0000', '#ff6600', '#ffff00', '#33cc33', '#3399ff', '#9933ff']
                 });
             }, 1500);
         }
 
+        function createFloatingObject(emojiArray) {
+            const emoji = document.createElement('div');
+            emoji.classList.add('floating-object');
+            emoji.innerHTML = emojiArray[Math.floor(Math.random() * emojiArray.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 6000);
+        }
+
+        function startFloatingEmojis() {
+            setInterval(() => createFloatingObject(['❤', '💜', '💙', '💛', '💚']), 300);
+            setInterval(() => createFloatingObject(['🎈', '🎁', '🎉', '🎂']), 500);
+        }
+
         window.onload = function () {
-            startConfetti();
-            startFloatingEffects();
+            startFloatingEmojis();
         };
     </script>
 
