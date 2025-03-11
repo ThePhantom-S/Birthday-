@@ -72,9 +72,9 @@
     <img src="prince.jpg" alt="Birthday Cake">
     <p>Wishing you a fantastic day filled with love & joy! ❤️💖</p>
 
-    <button class="button" onclick="toggleMusic()">Play Birthday Song 🎶</button>
+    <button class="button" onclick="playMusic()">Play Birthday Song 🎶</button>
 
-    <audio id="birthdaySong" loop>
+    <audio id="birthdaySong" loop allow="autoplay">
         <source src="https://files.chatgpt.com/public/the-birthday.mp3">
     </audio>
 
@@ -82,12 +82,12 @@
         let isPlaying = false;
         const song = document.getElementById('birthdaySong');
 
-        function toggleMusic() {
-            if (isPlaying) {
-                song.pause();
-                isPlaying = false;
-            } else {
-                song.play();
+        function playMusic() {
+            // Enable autoplay in mobile
+            if (!isPlaying) {
+                song.play().catch(() => {
+                    alert("Please tap the play button to hear the song.");
+                });
                 isPlaying = true;
                 startFireworks();
             }
